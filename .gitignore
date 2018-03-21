@@ -1,0 +1,11 @@
+vendor/
+**/*.log
+**/*.sqlite
+.idea/
+bin/
+tmp/
+*-packr.go
+public/assets/
+.vscode/
+.grifter/
+.env
