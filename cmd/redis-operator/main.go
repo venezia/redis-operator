@@ -16,6 +16,7 @@ import (
 	"time"
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"gitlab.com/mvenezia/redis-operator/pkg/controller"
+	"gitlab.com/mvenezia/redis-operator/pkg/client/clientset/versioned"
 
 	"log"
 )
@@ -62,9 +63,14 @@ func main() {
 		panic(err.Error())
 	}
 
-	operatorController := controller.New(controller.Config{KubeCli: clientset, KubeExtCli: apiextensionsclient.NewForConfigOrDie(config)})
+	operatorController := controller.New(controller.Config{
+		KubeCli: clientset,
+		KubeExtCli: apiextensionsclient.NewForConfigOrDie(config),
+		RedisCRCli: versioned.NewForConfigOrDie(config),
+		})
 
-	operatorController.InitCRD()
+	//operatorController.InitCRD()
+	operatorController.Start()
 
 	//_ = k8sutil.GenerateCRD(apiextensionsclient.NewForConfigOrDie(config), api.RedisCRDName, api.RedisResourceKind, api.RedisResourcePlural, "redis")
 
