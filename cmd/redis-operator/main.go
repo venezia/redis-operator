@@ -14,8 +14,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
-
-	"gitlab.com/mvenezia/redis-operator/pkg/util/k8sutil"
+	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
+	"gitlab.com/mvenezia/redis-operator/pkg/controller"
 
 	"log"
 )
@@ -62,7 +62,11 @@ func main() {
 		panic(err.Error())
 	}
 
-	generateCRD(clientset)
+	operatorController := controller.New(controller.Config{KubeCli: clientset, KubeExtCli: apiextensionsclient.NewForConfigOrDie(config)})
+
+	operatorController.InitCRD()
+
+	//_ = k8sutil.GenerateCRD(apiextensionsclient.NewForConfigOrDie(config), api.RedisCRDName, api.RedisResourceKind, api.RedisResourcePlural, "redis")
 
 	for {
 		pods, err := clientset.CoreV1().Pods("").List(metav1.ListOptions{})
@@ -100,15 +104,5 @@ func homeDir() string {
 	return os.Getenv("USERPROFILE") // windows
 }
 
-func generateCRD(clientset *kubernetes.Clientset) {
-	pods, err := clientset.CoreV1().Pods("").List(metav1.ListOptions{})
-	if err != nil {
-		panic(err.Error())
-	}
-	fmt.Printf("There are %d pods in the cluster\n", len(pods.Items))
 
-	if k8sutil.IsResourceAlreadyExistsError(err) {
-		log.Print("Hi Mom")
-	}
 
-}

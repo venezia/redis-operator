@@ -206,7 +206,7 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
-  revision = "80db560fac1fb3e6ac81dbc7f8ae4c061f5257bd"
+  revision = "88942b9c40a4c9d203b82b3731787b672d6e809b"
 
 [[projects]]
   branch = "master"
@@ -227,7 +227,7 @@
     "unix",
     "windows"
   ]
-  revision = "c488ab1dd8481ef762f96a79a9577c27825be697"
+  revision = "13d03a9a82fba647c21a0ef8fba44a795d0f0835"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -253,14 +253,14 @@
 [[projects]]
   name = "gopkg.in/inf.v0"
   packages = ["."]
-  revision = "3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4"
-  version = "v0.9.0"
+  revision = "d2d2541c53f18d2a059457998ce2876cc8e67cbf"
+  version = "v0.9.1"
 
 [[projects]]
   name = "gopkg.in/yaml.v2"
   packages = ["."]
-  revision = "7f97868eec74b32b0982dd158a51a446d1da7eb5"
-  version = "v2.1.1"
+  revision = "86f5ed62f8a0ee96bd888d2efdfd6d4fb100a4eb"
+  version = "v2.2.0"
 
 [[projects]]
   branch = "master"
@@ -295,7 +295,19 @@
     "storage/v1alpha1",
     "storage/v1beta1"
   ]
-  revision = "5584376ceeffeb13a2e98b5e9f0e9dab37de4bab"
+  revision = "055879e38033d1526b0fe169089a055c33fa3990"
+
+[[projects]]
+  branch = "master"
+  name = "k8s.io/apiextensions-apiserver"
+  packages = [
+    "pkg/apis/apiextensions",
+    "pkg/apis/apiextensions/v1beta1",
+    "pkg/client/clientset/clientset",
+    "pkg/client/clientset/clientset/scheme",
+    "pkg/client/clientset/clientset/typed/apiextensions/v1beta1"
+  ]
+  revision = "881ea15efc2de46b17cde05e31641ac41d043ef5"
 
 [[projects]]
   branch = "master"
@@ -340,7 +352,7 @@
     "pkg/watch",
     "third_party/forked/golang/reflect"
   ]
-  revision = "969dbad513b6e181526671579728bd3cdbb633d7"
+  revision = "210bcde8e5a7715fe776460ca1df1a3f2738725e"
 
 [[projects]]
   name = "k8s.io/client-go"
@@ -403,6 +415,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f81f8199a4c9007e7bcafe56b8242845cce5127574bf1980b6db0ef220909fa7"
+  inputs-digest = "08073db08b126aab65039130c8f6df6ef74a31c83629fbc5704c1d997da2e3fe"
   solver-name = "gps-cdcl"
   solver-version = 1
