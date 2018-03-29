@@ -70,8 +70,9 @@ func New(config Config, cl *api.Redis) *Redis {
 	cmdOut, err := exec.Command(command, arguments...).Output()
 	if err != nil {
 		log.Printf("Error executing command: %s\n", err)
+		log.Printf("Helm response: %s\n", cmdOut)
 	}
-	log.Printf("Helm response: %s\n", cmdOut)
+
 
 	return c
 }
@@ -90,8 +91,8 @@ func (c *Redis) Delete(cl *api.Redis) {
 	cmdOut, err := exec.Command(command, arguments...).Output()
 	if err != nil {
 		log.Printf("Error executing command: %s\n", err)
+		log.Printf("Helm response: %s\n", cmdOut)
 	}
-	log.Printf("Helm response: %s\n", cmdOut)
 
 }
 

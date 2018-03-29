@@ -69,7 +69,7 @@ func main() {
 		RedisCRCli: versioned.NewForConfigOrDie(config),
 		})
 
-	//operatorController.InitCRD()
+	operatorController.InitCRD()
 	operatorController.Start()
 
 	//_ = k8sutil.GenerateCRD(apiextensionsclient.NewForConfigOrDie(config), api.RedisCRDName, api.RedisResourceKind, api.RedisResourcePlural, "redis")
