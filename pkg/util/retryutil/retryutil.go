@@ -60,4 +60,3 @@ func Retry(interval time.Duration, maxRetries int, f ConditionFunc) error {
 	}
 	return &RetryError{maxRetries}
 }
-

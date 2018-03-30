@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
+	"gitlab.com/mvenezia/redis-operator/pkg/client/clientset/versioned"
+	"gitlab.com/mvenezia/redis-operator/pkg/controller"
+	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -14,9 +17,6 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
-	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
-	"gitlab.com/mvenezia/redis-operator/pkg/controller"
-	"gitlab.com/mvenezia/redis-operator/pkg/client/clientset/versioned"
 
 	"log"
 )
@@ -64,10 +64,10 @@ func main() {
 	}
 
 	operatorController := controller.New(controller.Config{
-		KubeCli: clientset,
+		KubeCli:    clientset,
 		KubeExtCli: apiextensionsclient.NewForConfigOrDie(config),
 		RedisCRCli: versioned.NewForConfigOrDie(config),
-		})
+	})
 
 	operatorController.InitCRD()
 	operatorController.Start()
@@ -109,6 +109,3 @@ func homeDir() string {
 	}
 	return os.Getenv("USERPROFILE") // windows
 }
-
-
-

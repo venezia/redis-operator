@@ -1,14 +1,14 @@
 package k8sutil
 
 import (
+	"fmt"
+	api "gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1"
+	"gitlab.com/mvenezia/redis-operator/pkg/util/retryutil"
 	apiextensionsv1beta1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
-	api "gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"log"
-	"fmt"
 	"time"
-	"gitlab.com/mvenezia/redis-operator/pkg/util/retryutil"
 )
 
 func CreateCRD(clientset apiextensionsclient.Interface, crdName, rkind, rplural, shortName string) error {

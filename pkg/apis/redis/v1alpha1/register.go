@@ -9,16 +9,15 @@ import (
 const (
 	RedisResourceKind   = "Redis"
 	RedisResourcePlural = "redii"
-	groupName                 = "redis.database.samsung.com"
-
-	)
+	groupName           = "redis.database.samsung.com"
+)
 
 var (
 	SchemeBuilder = runtime.NewSchemeBuilder(addKnownTypes)
 	AddToScheme   = SchemeBuilder.AddToScheme
 
 	SchemeGroupVersion = schema.GroupVersion{Group: "redis.database.samsung.com", Version: "v1alpha1"}
-	RedisCRDName = RedisResourcePlural + "." + groupName
+	RedisCRDName       = RedisResourcePlural + "." + groupName
 )
 
 // addKnownTypes adds the set of types defined in this package to the supplied scheme.

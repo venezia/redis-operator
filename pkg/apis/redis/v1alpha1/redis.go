@@ -18,7 +18,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-
 // RedisList is a list of redis clusters.
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type RedisList struct {
@@ -46,21 +45,20 @@ type RedisSpec struct {
 
 	// Sentinel defines its failover settings
 	Sentinel SentinelSettings `json:"sentinel,omitempty"`
-
 }
 
 // RedisSettings defines the specification of the redis system
 type RedisSettings struct {
-	Replicas  int32                  `json:"replicas,omitempty"`
-	Resources RedisResources 		 `json:"resources,omitempty"`
-	Exporter  bool                   `json:"exporter,omitempty"`
-	Version   string                 `json:"version,omitempty"`
+	Replicas  int32          `json:"replicas,omitempty"`
+	Resources RedisResources `json:"resources,omitempty"`
+	Exporter  bool           `json:"exporter,omitempty"`
+	Version   string         `json:"version,omitempty"`
 }
 
 // SentinelSettings defines the specification of the sentinel cluster
 type SentinelSettings struct {
-	Replicas  int32                  `json:"replicas,omitempty"`
-	Resources RedisResources 	     `json:"resources,omitempty"`
+	Replicas  int32          `json:"replicas,omitempty"`
+	Resources RedisResources `json:"resources,omitempty"`
 }
 
 // RedisResources sets the limits and requests for a container

@@ -1,23 +1,23 @@
 package controller
 
 import (
+	api "gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1"
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/client-go/kubernetes"
-	api "gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1"
 
 	"github.com/sirupsen/logrus"
-	"gitlab.com/mvenezia/redis-operator/pkg/util/k8sutil"
 	"gitlab.com/mvenezia/redis-operator/pkg/redis"
+	"gitlab.com/mvenezia/redis-operator/pkg/util/k8sutil"
 	kwatch "k8s.io/apimachinery/pkg/watch"
 
 	"fmt"
 	"time"
 
-	"k8s.io/apimachinery/pkg/fields"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/tools/cache"
-	"gitlab.com/mvenezia/redis-operator/pkg/client/clientset/versioned"
 	"context"
+	"gitlab.com/mvenezia/redis-operator/pkg/client/clientset/versioned"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/fields"
+	"k8s.io/client-go/tools/cache"
 )
 
 var initRetryWaitTime = 30 * time.Second
@@ -27,34 +27,34 @@ var pt *panicTimer
 func init() {
 	pt = newPanicTimer(time.Minute, "unexpected long blocking (> 1 Minute) when handling cluster event")
 }
+
 type Event struct {
 	Type   kwatch.EventType
 	Object *api.Redis
 }
 
-
 type Controller struct {
 	logger *logrus.Entry
 	Config
 
-	redii	map[string]*redis.Redis
+	redii map[string]*redis.Redis
 }
 
 type Config struct {
-	Namespace 		string
-	ClusterWide 	bool
-	ServiceAccount 	string
-	KubeCli			kubernetes.Interface
-	KubeExtCli		apiextensionsclient.Interface
-	RedisCRCli		versioned.Interface
-	CreateCRD		bool
+	Namespace      string
+	ClusterWide    bool
+	ServiceAccount string
+	KubeCli        kubernetes.Interface
+	KubeExtCli     apiextensionsclient.Interface
+	RedisCRCli     versioned.Interface
+	CreateCRD      bool
 }
 
 func New(cfg Config) *Controller {
 	return &Controller{
 		logger: logrus.WithField("pkg", "controller"),
 		Config: cfg,
-		redii: make(map[string]*redis.Redis),
+		redii:  make(map[string]*redis.Redis),
 	}
 }
 
