@@ -5,12 +5,13 @@ import (
 	"gitlab.com/mvenezia/redis-operator/pkg/client/clientset/versioned"
 	"k8s.io/client-go/kubernetes"
 
-	"github.com/sirupsen/logrus"
-	yaml "gopkg.in/yaml.v2"
-	corev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	"log"
 	"os/exec"
 	"time"
+
+	"github.com/sirupsen/logrus"
+	yaml "gopkg.in/yaml.v2"
+	corev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 )
 
 var (

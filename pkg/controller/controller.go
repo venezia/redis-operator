@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"context"
+
 	"gitlab.com/mvenezia/redis-operator/pkg/client/clientset/versioned"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
