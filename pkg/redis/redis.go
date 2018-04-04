@@ -5,12 +5,13 @@ import (
 	"gitlab.com/mvenezia/redis-operator/pkg/client/clientset/versioned"
 	"k8s.io/client-go/kubernetes"
 
-	"github.com/sirupsen/logrus"
-	yaml "gopkg.in/yaml.v2"
-	corev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	"log"
 	"os/exec"
 	"time"
+
+	"github.com/sirupsen/logrus"
+	yaml "gopkg.in/yaml.v2"
+	corev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 )
 
 var (
@@ -29,6 +30,7 @@ type redisEvent struct {
 	cluster *api.Redis
 }
 
+// Config object
 type Config struct {
 	ServiceAccount string
 
@@ -36,6 +38,7 @@ type Config struct {
 	RedisCRCli versioned.Interface
 }
 
+// Redis represents a redis instance
 type Redis struct {
 	logger *logrus.Entry
 
@@ -51,6 +54,7 @@ type Redis struct {
 	eventsCli corev1.EventInterface
 }
 
+// New creates a new Redis object instance
 func New(config Config, cl *api.Redis) *Redis {
 	lg := logrus.WithField("pkg", "redis").WithField("redis-name", cl.Name)
 
@@ -76,12 +80,12 @@ func New(config Config, cl *api.Redis) *Redis {
 	return c
 }
 
+// Update modifies a redis instance
 func (c *Redis) Update(cl *api.Redis) {
-
 	log.Printf("Modifying Redis Instance %s\n", cl.ObjectMeta.Name)
-
 }
 
+// Delete destroys an instance
 func (c *Redis) Delete(cl *api.Redis) {
 
 	log.Printf("Deleting Redis Instance %s\n", cl.ObjectMeta.Name)

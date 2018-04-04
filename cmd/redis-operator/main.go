@@ -2,7 +2,11 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+	"time"
+
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"gitlab.com/mvenezia/redis-operator/pkg/client/clientset/versioned"
@@ -13,15 +17,68 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-	"os"
-	"path/filepath"
-	"strings"
-	"time"
 
-	"log"
+	"github.com/juju/loggo"
+	"github.com/venezia/redis-operator/pkg/util"
+)
+
+var (
+	logger loggo.Logger
+	config *rest.Config
+)
+
+const (
+	kubeconfigDir  = ".kube"
+	kubeconfigFile = "config"
 )
 
 func main() {
+	var err error
+	logger := util.GetModuleLogger("cmd.redis-operator", loggo.INFO)
+
+	// setup viper
+	viperInit()
+
+	// get flags
+	portNumber := viper.GetInt("port")
+	kubeconfigLocation := viper.GetString("kubeconfig")
+
+	// Debug for now
+	logger.Infof("Parsed Variables: \n  Port: %d \n  Kubeconfig: %s", portNumber, kubeconfigLocation)
+
+	if kubeconfigLocation != "" {
+		config, err = clientcmd.BuildConfigFromFlags("", kubeconfigLocation)
+		if err != nil {
+			logErrorAndExit(err)
+		}
+	} else {
+		configPath := filepath.Join(homeDir(), kubeconfigDir, kubeconfigFile)
+		if _, err := os.Stat(configPath); err == nil {
+			config, err = clientcmd.BuildConfigFromFlags("", configPath)
+		} else {
+			config, err = rest.InClusterConfig()
+		}
+	}
+
+	// create the clientSet
+	clientSet, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		logErrorAndExit(err)
+	}
+
+	operatorController := controller.New(controller.Config{
+		KubeCli:    clientSet,
+		KubeExtCli: apiextensionsclient.NewForConfigOrDie(config),
+		RedisCRCli: versioned.NewForConfigOrDie(config),
+	})
+
+	operatorController.InitCRD()
+	operatorController.Start()
+
+	monitorPods(clientSet, "default", "example-xxxxx")
+}
+
+func viperInit() {
 	viper.SetEnvPrefix("redisoperator")
 	replacer := strings.NewReplacer("-", "_")
 	viper.SetEnvKeyReplacer(replacer)
@@ -35,72 +92,39 @@ func main() {
 	viper.BindPFlags(pflag.CommandLine)
 
 	viper.AutomaticEnv()
-	portNumber := viper.GetInt("port")
-	kubeconfigLocation := viper.GetString("kubeconfig")
+}
 
-	// Debug for now
-	log.Printf("\nParsed Variables:\nPort: %d\nKubeconfig: %s\n\n", portNumber, kubeconfigLocation)
-
-	var err error
-	var config *rest.Config
-
-	if kubeconfigLocation != "" {
-		config, err = clientcmd.BuildConfigFromFlags("", kubeconfigLocation)
-		if err != nil {
-			panic(err.Error())
-		}
-	} else {
-		if _, err := os.Stat(filepath.Join(homeDir(), ".kube", "config")); err == nil {
-			config, err = clientcmd.BuildConfigFromFlags("", filepath.Join(homeDir(), ".kube", "config"))
-		} else {
-			config, err = rest.InClusterConfig()
-		}
-	}
-
-	// create the clientset
-	clientset, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		panic(err.Error())
-	}
-
-	operatorController := controller.New(controller.Config{
-		KubeCli:    clientset,
-		KubeExtCli: apiextensionsclient.NewForConfigOrDie(config),
-		RedisCRCli: versioned.NewForConfigOrDie(config),
-	})
-
-	operatorController.InitCRD()
-	operatorController.Start()
-
-	//_ = k8sutil.GenerateCRD(apiextensionsclient.NewForConfigOrDie(config), api.RedisCRDName, api.RedisResourceKind, api.RedisResourcePlural, "redis")
-
+func monitorPods(clientSet *kubernetes.Clientset, namespace string, pod string) {
 	for {
-		pods, err := clientset.CoreV1().Pods("").List(metav1.ListOptions{})
+		pods, err := clientSet.CoreV1().Pods("").List(metav1.ListOptions{})
 		if err != nil {
-			panic(err.Error())
+			logErrorAndExit(err)
 		}
-		fmt.Printf("There are %d pods in the cluster\n", len(pods.Items))
+
+		logger.Infof("There are %d pods in the cluster", len(pods.Items))
 
 		// Examples for error handling:
 		// - Use helper functions like e.g. errors.IsNotFound()
 		// - And/or cast to StatusError and use its properties like e.g. ErrStatus.Message
-		namespace := "default"
-		pod := "example-xxxxx"
-		_, err = clientset.CoreV1().Pods(namespace).Get(pod, metav1.GetOptions{})
+		_, err = clientSet.CoreV1().Pods(namespace).Get(pod, metav1.GetOptions{})
+
 		if errors.IsNotFound(err) {
-			fmt.Printf("Pod %s in namespace %s not found\n", pod, namespace)
+			logger.Warningf("Pod %s in namespace %s not found", pod, namespace)
 		} else if statusError, isStatus := err.(*errors.StatusError); isStatus {
-			fmt.Printf("Error getting pod %s in namespace %s: %v\n",
-				pod, namespace, statusError.ErrStatus.Message)
+			logger.Warningf("Error getting pod %s in namespace %s: %v", pod, namespace, statusError.ErrStatus.Message)
 		} else if err != nil {
-			panic(err.Error())
+			logErrorAndExit(err)
 		} else {
-			fmt.Printf("Found pod %s in namespace %s\n", pod, namespace)
+			logger.Infof("Found pod %s in namespace %s", pod, namespace)
 		}
 
 		time.Sleep(10 * time.Second)
 	}
+}
 
+func logErrorAndExit(err error) {
+	logger.Criticalf("error: %s", err)
+	os.Exit(1)
 }
 
 func homeDir() string {
