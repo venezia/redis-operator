@@ -29,11 +29,13 @@ func init() {
 	pt = newPanicTimer(time.Minute, "unexpected long blocking (> 1 Minute) when handling cluster event")
 }
 
+// Event object
 type Event struct {
 	Type   kwatch.EventType
 	Object *api.Redis
 }
 
+// Controller object, contains configs and map of redis instances.
 type Controller struct {
 	logger *logrus.Entry
 	Config
@@ -41,6 +43,7 @@ type Controller struct {
 	redii map[string]*redis.Redis
 }
 
+// Config object
 type Config struct {
 	Namespace      string
 	ClusterWide    bool
@@ -51,6 +54,7 @@ type Config struct {
 	CreateCRD      bool
 }
 
+// New creates new controller object
 func New(cfg Config) *Controller {
 	return &Controller{
 		logger: logrus.WithField("pkg", "controller"),
@@ -66,6 +70,7 @@ func (c *Controller) makeRedisConfig() redis.Config {
 	}
 }
 
+// InitCRD creates crd objects.
 func (c *Controller) InitCRD() error {
 	err := k8sutil.CreateCRD(c.KubeExtCli, api.RedisCRDName, api.RedisResourceKind, api.RedisResourcePlural, "redis")
 	if err != nil {
@@ -104,6 +109,7 @@ func (c *Controller) handleRedisEvent(event *Event) (bool, error) {
 	return false, nil
 }
 
+// Start initializes resources and runs controller.
 func (c *Controller) Start() error {
 	// TODO: get rid of this init code. CRD and storage class will be managed outside of operator.
 	for {

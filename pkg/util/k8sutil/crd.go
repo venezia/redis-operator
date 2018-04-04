@@ -12,6 +12,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+// CreateCRD creates the objects in kubernetes
 func CreateCRD(clientset apiextensionsclient.Interface, crdName, rkind, rplural, shortName string) error {
 	crd := &apiextensionsv1beta1.CustomResourceDefinition{
 		ObjectMeta: metav1.ObjectMeta{
@@ -39,6 +40,7 @@ func CreateCRD(clientset apiextensionsclient.Interface, crdName, rkind, rplural,
 	return nil
 }
 
+// WaitCRDReady waits until proper condition is obtained.
 func WaitCRDReady(clientset apiextensionsclient.Interface, crdName string) error {
 	err := retryutil.Retry(5*time.Second, 20, func() (bool, error) {
 		crd, err := clientset.ApiextensionsV1beta1().CustomResourceDefinitions().Get(crdName, metav1.GetOptions{})
