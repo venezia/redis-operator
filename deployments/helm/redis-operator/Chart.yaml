@@ -1,0 +1,14 @@
+name: redis-operator
+version: v0.0.1
+description: Redis Operator
+keywords:
+- redis
+- operator
+- controller
+home: https://gitlab.com/mvenezia/redis-operator
+sources:
+- https://quay.io/repository/venezia/redis-operator
+- https://gitlab.com/mvenezia/redis-operator
+maintainers:
+- name: Michael Venezia
+  email: mvenezia@gmail.com
