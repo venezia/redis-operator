@@ -48,12 +48,6 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/google/btree"
-  packages = ["."]
-  revision = "e89373fe6b4a7413d7acd6da1725b83ef713e6e4"
-
-[[projects]]
-  branch = "master"
   name = "github.com/google/gofuzz"
   packages = ["."]
   revision = "24818f796faf91cd76ec7bddd72458fbced7a6c1"
@@ -67,15 +61,6 @@
   ]
   revision = "ee43cbb60db7bd22502942cccbc39059117352ab"
   version = "v0.1.0"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/gregjones/httpcache"
-  packages = [
-    ".",
-    "diskcache"
-  ]
-  revision = "9cad4c3443a7200dd6400aef47183728de563a38"
 
 [[projects]]
   branch = "master"
@@ -101,7 +86,7 @@
     "json/scanner",
     "json/token"
   ]
-  revision = "f40e974e75af4e271d97ce0fc917af5898ae7bda"
+  revision = "ef8a98b0bbce4a65b5aa4c368430a80ddc533168"
 
 [[projects]]
   branch = "master"
@@ -112,8 +97,8 @@
 [[projects]]
   name = "github.com/imdario/mergo"
   packages = ["."]
-  revision = "163f41321a19dd09362d4c63cc2489db2015f1f4"
-  version = "0.3.2"
+  revision = "9d5f1277e9a8ed20c3684bda8fde67c05628518c"
+  version = "v0.3.4"
 
 [[projects]]
   name = "github.com/json-iterator/go"
@@ -126,12 +111,6 @@
   name = "github.com/juju/loggo"
   packages = ["."]
   revision = "7f1609ff1f3fcf3519ed62ccaaa9e609ea287838"
-
-[[projects]]
-  name = "github.com/juju/ratelimit"
-  packages = ["."]
-  revision = "59fac5042749a5afb9af70e813da1dd5474f0167"
-  version = "1.0.1"
 
 [[projects]]
   name = "github.com/magiconair/properties"
@@ -164,18 +143,6 @@
   version = "v1.1.0"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/petar/GoLLRB"
-  packages = ["llrb"]
-  revision = "53be0d36a84c2a886ca057d34b6aa4468df9ccb4"
-
-[[projects]]
-  name = "github.com/peterbourgon/diskv"
-  packages = ["."]
-  revision = "5f041e8faa004a95c88a202771f4cc3e991971e6"
-  version = "v2.0.1"
-
-[[projects]]
   name = "github.com/sirupsen/logrus"
   packages = ["."]
   revision = "c155da19408a8799da419ed3eeb0cb5db0ad5dbc"
@@ -187,8 +154,8 @@
     ".",
     "mem"
   ]
-  revision = "bb8f1927f2a9d3ab41c9340aa034f6b803f4359c"
-  version = "v1.0.2"
+  revision = "63644898a8da0bc22138abf860edaf5277b6102e"
+  version = "v1.1.0"
 
 [[projects]]
   name = "github.com/spf13/cast"
@@ -216,29 +183,15 @@
 
 [[projects]]
   branch = "master"
-  name = "gitlab.com/mvenezia/redis-operator"
-  packages = [
-    "pkg/apis/redis/v1alpha1",
-    "pkg/client/clientset/versioned",
-    "pkg/client/clientset/versioned/scheme",
-    "pkg/client/clientset/versioned/typed/redis/v1alpha1",
-    "pkg/client/clientset/versioned/typed/redis/v1alpha1/fake",
-    "pkg/client/informers/externalversions/internalinterfaces",
-    "pkg/client/informers/externalversions/redis",
-    "pkg/client/informers/externalversions/redis/v1alpha1",
-    "pkg/client/listers/redis/v1alpha1",
-    "pkg/controller",
-    "pkg/redis",
-    "pkg/util/k8sutil",
-    "pkg/util/retryutil"
-  ]
-  revision = "f79d6ebbad845aea3744249ffb57b7aee8a3d7fb"
+  name = "github.com/venezia/redis-operator"
+  packages = ["pkg/util"]
+  revision = "b07e7f14c534545bd5c8d4c4fd2f72ef5c60fa27"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
-  revision = "88942b9c40a4c9d203b82b3731787b672d6e809b"
+  revision = "b2aa35443fbc700ab74c586ae79b81c171851023"
 
 [[projects]]
   branch = "master"
@@ -250,7 +203,7 @@
     "idna",
     "lex/httplex"
   ]
-  revision = "6078986fec03a1dcc236c34816c71b0e05018fda"
+  revision = "b3c676e531a6dc479fa1b35ac961c13f5e2b4d2e"
 
 [[projects]]
   branch = "master"
@@ -259,7 +212,7 @@
     "unix",
     "windows"
   ]
-  revision = "13d03a9a82fba647c21a0ef8fba44a795d0f0835"
+  revision = "1d206c9fa8975fb4cf00df1dc8bf3283dc24ba0e"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -283,6 +236,12 @@
   version = "v0.3.0"
 
 [[projects]]
+  branch = "master"
+  name = "golang.org/x/time"
+  packages = ["rate"]
+  revision = "26559e0f760e39c24d730d3224364aef164ee23f"
+
+[[projects]]
   name = "gopkg.in/inf.v0"
   packages = ["."]
   revision = "d2d2541c53f18d2a059457998ce2876cc8e67cbf"
@@ -291,8 +250,8 @@
 [[projects]]
   name = "gopkg.in/yaml.v2"
   packages = ["."]
-  revision = "86f5ed62f8a0ee96bd888d2efdfd6d4fb100a4eb"
-  version = "v2.2.0"
+  revision = "5420a8b6744d3b0345ab293f6fcba19c978f1183"
+  version = "v2.2.1"
 
 [[projects]]
   branch = "master"
@@ -327,7 +286,7 @@
     "storage/v1alpha1",
     "storage/v1beta1"
   ]
-  revision = "495d099a8d378fbb811acf6eb8d0d932a45dd49c"
+  revision = "c4ebf33f93081f8c7602d29a59944e4a9f684ac2"
 
 [[projects]]
   branch = "master"
@@ -339,7 +298,7 @@
     "pkg/client/clientset/clientset/scheme",
     "pkg/client/clientset/clientset/typed/apiextensions/v1beta1"
   ]
-  revision = "6aee3f678a428a3b551e0d87efe2e0a3e1a9641c"
+  revision = "76b8134f2082ae81f4989c709be17587745ef0c0"
 
 [[projects]]
   branch = "master"
@@ -421,7 +380,10 @@
     "kubernetes/typed/storage/v1",
     "kubernetes/typed/storage/v1alpha1",
     "kubernetes/typed/storage/v1beta1",
+    "pkg/apis/clientauthentication",
+    "pkg/apis/clientauthentication/v1alpha1",
     "pkg/version",
+    "plugin/pkg/client/auth/exec",
     "rest",
     "rest/watch",
     "testing",
@@ -439,14 +401,15 @@
     "util/cert",
     "util/flowcontrol",
     "util/homedir",
-    "util/integer"
+    "util/integer",
+    "util/retry"
   ]
-  revision = "78700dec6369ba22221b72770783300f143df150"
-  version = "v6.0.0"
+  revision = "23781f4d6632d88e869066eaebb743857aa1ef9b"
+  version = "v7.0.0"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "4dcbf943678525028021f89fe566215b59f1e7b70bfbf3c7c256fb59d4109d5a"
+  inputs-digest = "d7e3a38edec661d0525b43e3da4630421ee60d6e871c39921cab3624614ecbff"
   solver-name = "gps-cdcl"
   solver-version = 1
