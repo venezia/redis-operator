@@ -1,0 +1,13 @@
+apiVersion: redis.database.samsung.com/v1alpha1
+kind: Redis
+metadata:
+  namespace: default
+  name: my-redis
+spec:
+  redis:
+    replicas: 3
+    requests:
+      memory: 100Mi
+  setinel:
+    replicas: 3
+

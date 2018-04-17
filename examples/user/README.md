@@ -1,0 +1,1 @@
+This is a collected sample of example redis resource files.

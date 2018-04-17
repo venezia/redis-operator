@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: "redisoperator-redis-operator-sa"
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: "redisoperator-redis-operator-cr-binding"
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: "redisoperator-redis-operator-sa"
+    namespace: "default"
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redisoperator-redis-operator
+  labels:
+    app: redisoperator-redis-operator
+    chart: "redis-operator-v0.0.1"
+    release: "redisoperator"
+    heritage: "Tiller"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redisoperator-redis-operator
+    spec:
+      containers:
+      - name: redisoperator-redis-operator
+        image: quay.io/venezia/redis-operator:v0.0.1
+        imagePullPolicy: ""
+        ports:
+        - name: http
+          containerPort: 80
+        resources:
+      serviceAccountName: "redisoperator-redis-operator-sa"
