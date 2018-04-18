@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 # Setting some variables up here
-PACKAGE_HOME=${PWD}/../
+THIS_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PACKAGE_HOME=${THIS_DIRECTORY}/../
 PACKAGE_NAME=gitlab.com/mvenezia/redis-operator
 PACKAGE_VIRTUAL=/go/src/${PACKAGE_NAME}
 K8S_CODE_GEN=quay.io/venezia/k8s-code-generator:v0.1.0
