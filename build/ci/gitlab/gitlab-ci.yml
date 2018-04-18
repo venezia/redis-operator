@@ -12,7 +12,10 @@ variables:
   DOCKER_DRIVER: overlay2
 
 build:branch:
+  variables:
+    IMAGE_URI: $CI_REGISTRY_IMAGE:branch-$CI_COMMIT_REF_NAME-$CI_JOB_ID
   stage: build
   script:
   - docker build -t $IMAGE_URI .
   - docker push $IMAGE_URI
+
