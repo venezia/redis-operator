@@ -1,5 +1,5 @@
 /*
-Copyright 2018 The redis-operator Authors.
+Copyright 2018 The Kubernetes Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,13 +21,13 @@ package internalinterfaces
 import (
 	time "time"
 
-	versioned "gitlab.com/mvenezia/redis-operator/pkg/client/clientset/versioned"
+	clientset "gitlab.com/mvenezia/redis-operator/pkg/client/clientset"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	cache "k8s.io/client-go/tools/cache"
 )
 
-type NewInformerFunc func(versioned.Interface, time.Duration) cache.SharedIndexInformer
+type NewInformerFunc func(clientset.Interface, time.Duration) cache.SharedIndexInformer
 
 // SharedInformerFactory a small interface to allow for adding an informer without an import cycle
 type SharedInformerFactory interface {

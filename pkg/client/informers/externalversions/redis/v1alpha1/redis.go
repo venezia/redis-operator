@@ -1,5 +1,5 @@
 /*
-Copyright 2018 The redis-operator Authors.
+Copyright 2018 The Kubernetes Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,13 +22,13 @@ import (
 	time "time"
 
 	redis_v1alpha1 "gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1"
-	versioned "gitlab.com/mvenezia/redis-operator/pkg/client/clientset/versioned"
+	clientset "gitlab.com/mvenezia/redis-operator/pkg/client/clientset"
 	internalinterfaces "gitlab.com/mvenezia/redis-operator/pkg/client/informers/externalversions/internalinterfaces"
-	v1alpha1 "gitlab.com/mvenezia/redis-operator/pkg/client/listers/redis/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
+	v1alpha1 "k8s.io/kubernetes/pkg/client/listers/redis/v1alpha1"
 )
 
 // RedisInformer provides access to a shared informer and lister for
@@ -47,14 +47,14 @@ type redisInformer struct {
 // NewRedisInformer constructs a new informer for Redis type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewRedisInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
+func NewRedisInformer(client clientset.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
 	return NewFilteredRedisInformer(client, namespace, resyncPeriod, indexers, nil)
 }
 
 // NewFilteredRedisInformer constructs a new informer for Redis type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewFilteredRedisInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
+func NewFilteredRedisInformer(client clientset.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
 	return cache.NewSharedIndexInformer(
 		&cache.ListWatch{
 			ListFunc: func(options v1.ListOptions) (runtime.Object, error) {
@@ -76,7 +76,7 @@ func NewFilteredRedisInformer(client versioned.Interface, namespace string, resy
 	)
 }
 
-func (f *redisInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
+func (f *redisInformer) defaultInformer(client clientset.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
 	return NewFilteredRedisInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
 }
 

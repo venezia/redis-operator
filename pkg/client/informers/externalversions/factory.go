@@ -1,5 +1,5 @@
 /*
-Copyright 2018 The redis-operator Authors.
+Copyright 2018 The Kubernetes Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import (
 	sync "sync"
 	time "time"
 
-	versioned "gitlab.com/mvenezia/redis-operator/pkg/client/clientset/versioned"
+	clientset "gitlab.com/mvenezia/redis-operator/pkg/client/clientset"
 	internalinterfaces "gitlab.com/mvenezia/redis-operator/pkg/client/informers/externalversions/internalinterfaces"
 	redis "gitlab.com/mvenezia/redis-operator/pkg/client/informers/externalversions/redis"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -33,7 +33,7 @@ import (
 )
 
 type sharedInformerFactory struct {
-	client           versioned.Interface
+	client           clientset.Interface
 	namespace        string
 	tweakListOptions internalinterfaces.TweakListOptionsFunc
 	lock             sync.Mutex
@@ -46,14 +46,14 @@ type sharedInformerFactory struct {
 }
 
 // NewSharedInformerFactory constructs a new instance of sharedInformerFactory
-func NewSharedInformerFactory(client versioned.Interface, defaultResync time.Duration) SharedInformerFactory {
+func NewSharedInformerFactory(client clientset.Interface, defaultResync time.Duration) SharedInformerFactory {
 	return NewFilteredSharedInformerFactory(client, defaultResync, v1.NamespaceAll, nil)
 }
 
 // NewFilteredSharedInformerFactory constructs a new instance of sharedInformerFactory.
 // Listers obtained via this SharedInformerFactory will be subject to the same filters
 // as specified here.
-func NewFilteredSharedInformerFactory(client versioned.Interface, defaultResync time.Duration, namespace string, tweakListOptions internalinterfaces.TweakListOptionsFunc) SharedInformerFactory {
+func NewFilteredSharedInformerFactory(client clientset.Interface, defaultResync time.Duration, namespace string, tweakListOptions internalinterfaces.TweakListOptionsFunc) SharedInformerFactory {
 	return &sharedInformerFactory{
 		client:           client,
 		namespace:        namespace,
