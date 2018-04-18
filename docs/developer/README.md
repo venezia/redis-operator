@@ -19,12 +19,12 @@ compy5000:redis-operator venezia$ du -s -m vendor/
 ### As a CI/CD process
 
 There is an included `Dockerfile` that will build the project for you located
-in [build/docker](../../build/docker)
+in [build/docker](../../build/docker/redis-operator)
 
 To execute it, simply do something like
 
 ```shell
-$ docker build -f ./build/docker/Dockerfile -t quay.io/venezia/redis-operator:v0.0.1 . 
+$ docker build -f ./build/docker/redis-operator/Dockerfile -t quay.io/venezia/redis-operator:v0.0.1 . 
 ```
 
 ## Required tools
