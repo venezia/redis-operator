@@ -16,6 +16,6 @@ build:branch:
     IMAGE_URI: $CI_REGISTRY_IMAGE:branch-$CI_COMMIT_REF_NAME-$CI_JOB_ID
   stage: build
   script:
-  - docker build -t $IMAGE_URI .
+  - docker build -t $IMAGE_URI -f build/docker/redis-operator/Dockerfile .
   - docker push $IMAGE_URI
 
