@@ -13,6 +13,7 @@ prepare:branch:
   script:
     - mkdir -p /go/src/gitlab.com/mvenezia
     - ln -s $PWD /go/src/gitlab.com/mvenezia/redis-operator
+    - cd /go/src/gitlab.com/mvenezia/redis-operator
     - dep ensure
     - ./hack/update-codegen.sh
 
