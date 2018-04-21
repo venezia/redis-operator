@@ -11,6 +11,7 @@ prepare:branch:
       - ./pkg/client
     expire_in: 1 day
   script:
+    - mkdir -p /go/src/gitlab.com/mvenezia
     - ln -s $PWD /go/src/gitlab.com/mvenezia/redis-operator
     - dep ensure
     - ./hack/update-codegen.sh
