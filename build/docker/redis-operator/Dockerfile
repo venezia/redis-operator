@@ -1,6 +1,6 @@
 # Initial preparations
 FROM golang:1.10.1-alpine
-RUN apk update && apk add git
+#RUN apk update && apk add git
 
 # Let's add the code in
 ADD . /go/src/gitlab.com/mvenezia/redis-operator
