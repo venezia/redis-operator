@@ -3,11 +3,7 @@
 PACKAGE_NAME=gitlab.com/mvenezia/redis-operator
 
 go test -race \
-  ${PACKAGE_NAME}/cmd/redis-operator \
-  ${PACKAGE_NAME}/pkg/controller \
-  ${PACKAGE_NAME}/pkg/redis \
-  ${PACKAGE_NAME}/pkg/util/k8sutil \
-  ${PACKAGE_NAME}/pkg/util/retryutil \
+  $(go list ${PACKAGE_NAME}/... | grep -v /pkg/client/ ) \
   -v -coverprofile .testCoverage.txt
 
 
