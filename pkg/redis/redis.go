@@ -65,7 +65,7 @@ func New(config Config, cl *api.Redis) *Redis {
 		eventCh:   make(chan *redisEvent, 100),
 		stopCh:    make(chan struct{}),
 		status:    *(cl.Status.DeepCopy()),
-		eventsCli: config.KubeCli.Core().Events(cl.Namespace),
+		eventsCli: config.KubeCli.CoreV1().Events(cl.Namespace),
 	}
 
 	log.Printf("Adding Redis Instance %s\n", cl.ObjectMeta.Name)
