@@ -10,3 +10,4 @@ public/assets/
 .grifter/
 .env
 main
+.testCoverage.txt
