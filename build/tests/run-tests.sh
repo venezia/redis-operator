@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
-PACKAGE_NAME=gitlab.com/mvenezia/redis-operator
+THIS_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PACKAGE_HOME=${THIS_DIRECTORY}/../../
 
+cd $PACKAGE_HOME
 go test -race \
-  $(go list ${PACKAGE_NAME}/... | grep -v /pkg/client/ ) \
+  $(go list ./... | grep -v /pkg/client/ ) \
   -v -coverprofile .testCoverage.txt
 
 
