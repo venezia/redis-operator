@@ -12,4 +12,5 @@ RUN go get k8s.io/code-generator/cmd/client-gen && \
     go install k8s.io/code-generator/cmd/informer-gen && \
     go install k8s.io/code-generator/cmd/lister-gen && \
     go install k8s.io/code-generator/cmd/openapi-gen && \
-    go install k8s.io/code-generator/cmd/set-gen
+    go install k8s.io/code-generator/cmd/set-gen && \
+    go get -u github.com/golang/dep/cmd/dep

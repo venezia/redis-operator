@@ -1,16 +1,35 @@
 #!/usr/bin/env bash
 
-set -o errexit
-set -o nounset
-set -o pipefail
+# Setting some variables up here
+THIS_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PACKAGE_HOME=${THIS_DIRECTORY}/../
+PACKAGE_NAME=gitlab.com/mvenezia/redis-operator
+PACKAGE_VIRTUAL=/go/src/${PACKAGE_NAME}
+API_PACKAGE=redis/v1alpha1
 
-SCRIPT_ROOT=$(dirname ${BASH_SOURCE})/..
-CODEGEN_PKG=./../../../../../../..${GOPATH}/src/k8s.io/code-generator
+# Creating the deep copy object
+echo "Creating the deep copy object in ${PACKAGE_NAME}/pkg/apis/${API_PACKAGE} ... "
+deepcopy-gen --input-dirs ${PACKAGE_NAME}/pkg/apis/${API_PACKAGE}
+printf ".... done creating deep copy object\n\n"
 
-${CODEGEN_PKG}/generate-groups.sh "deepcopy,client,informer,lister" \
-  gitlab.com/mvenezia/redis-operator/pkg/client \
-  gitlab.com/mvenezia/redis-operator/pkg/apis \
-"redis:v1alpha1" \
---output-base "$(dirname ${BASH_SOURCE})/../../../../" \
---go-header-file ${SCRIPT_ROOT}/hack/custom-boilerplate.go.txt
+# Creating the openapi (validation) meta information
+echo "Creating the openapi validation object in ${PACKAGE_NAME}/pkg/apis/${API_PACKAGE} ... "
+openapi-gen -i ${PACKAGE_NAME}/pkg/apis/${API_PACKAGE},k8s.io/apimachinery/pkg/apis/meta/v1,k8s.io/api/core/v1 \
+       -p ${PACKAGE_NAME}/pkg/apis/${API_PACKAGE}
+printf ".... done creating openapi validation object\n\n"
 
+# Creating the clientset
+echo "Creating the clientset in ${PACKAGE_NAME}/pkg/client/clientset ... "
+client-gen -p ${PACKAGE_NAME}/pkg/client/clientset --input-base ${PACKAGE_NAME}/pkg/apis --input $API_PACKAGE -n versioned
+printf ".... done creating the clientset\n\n"
+
+# Creating the lister
+echo "Creating the lister in ${PACKAGE_NAME}/pkg/client/listers ... "
+lister-gen -p ${PACKAGE_NAME}/pkg/client/listers --input-dirs ${PACKAGE_NAME}/pkg/apis/${API_PACKAGE}
+printf ".... done creating the lister\n\n"
+
+# Creating the informer
+echo "Creating the informer in ${PACKAGE_NAME}/pkg/client/informers ... "
+informer-gen -p ${PACKAGE_NAME}/pkg/client/informers --input-dirs ${PACKAGE_NAME}/pkg/apis/${API_PACKAGE} \
+       --versioned-clientset-package ${PACKAGE_NAME}/pkg/client/clientset --listers-package ${PACKAGE_NAME}/pkg/client/listers
+printf ".... done creating the informer\n\n"

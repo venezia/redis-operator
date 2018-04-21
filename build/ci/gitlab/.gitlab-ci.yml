@@ -1,21 +1,35 @@
-image: docker:latest
+stages:
+ - prepare
+ - build
 
-services:
-  - docker:dind
-
-before_script:
-  - docker info
-  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-
-variables:
-#  DOCKER_HOST: tcp://localhost:2375
-  DOCKER_DRIVER: overlay2
+prepare:branch:
+  stage: prepare
+  image: quay.io/venezia/k8s-code-generator:v0.2.0
+  artifacts:
+    paths:
+      - ./vendor
+      - ./pkg/client
+      expire_in: 1 day
+  script:
+    - ln -s $PWD /go/src/gitlab.com/mvenezia/redis-operator
+    - dep ensure
+    - ./hack/update-codegen.sh
 
 build:branch:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
   variables:
     IMAGE_URI: $CI_REGISTRY_IMAGE:branch-$CI_COMMIT_REF_NAME-$CI_JOB_ID
-  stage: build
+    DOCKER_DRIVER: overlay2
+    #  DOCKER_HOST: tcp://localhost:2375
+  dependencies:
+    - prepare:branch
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
-  - docker build -t $IMAGE_URI -f build/docker/redis-operator/Dockerfile .
-  - docker push $IMAGE_URI
+    - docker build -t $IMAGE_URI -f build/docker/redis-operator/Dockerfile .
+    - docker push $IMAGE_URI
 
