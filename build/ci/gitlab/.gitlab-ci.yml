@@ -9,7 +9,7 @@ prepare:branch:
     paths:
       - ./vendor
       - ./pkg/client
-      expire_in: 1 day
+    expire_in: 1 day
   script:
     - ln -s $PWD /go/src/gitlab.com/mvenezia/redis-operator
     - dep ensure
