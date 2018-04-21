@@ -17,6 +17,17 @@ prepare:branch:
     - dep ensure
     - ./hack/update-codegen.sh
 
+test:branch:
+  stage: build
+  image: quay.io/venezia/k8s-code-generator:v0.2.0
+  dependencies:
+    - prepare:branch
+  script:
+    - mkdir -p /go/src/gitlab.com/mvenezia
+    - ln -s $PWD /go/src/gitlab.com/mvenezia/redis-operator
+    - cd /go/src/gitlab.com/mvenezia/redis-operator
+    - ./build/tests/run-tests.sh
+
 build:branch:
   stage: build
   image: docker:latest
