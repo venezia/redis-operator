@@ -30,6 +30,197 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
+		"gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.CPUAndMem": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "CPUAndMem defines how many cpu and ram the container will request/limit",
+					Properties: map[string]spec.Schema{
+						"cpu": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+						"memory": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+					},
+					Required: []string{"cpu", "memory"},
+				},
+			},
+			Dependencies: []string{},
+		},
+		"gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.Condition": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "Condition saves the state information of the redis system",
+					Properties: map[string]spec.Schema{
+						"type": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+						"reason": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+						"transitionTime": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+					},
+					Required: []string{"type", "reason", "transitionTime"},
+				},
+			},
+			Dependencies: []string{},
+		},
+		"gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.RedisResources": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "RedisResources sets the limits and requests for a container",
+					Properties: map[string]spec.Schema{
+						"requests": {
+							SchemaProps: spec.SchemaProps{
+								Ref: ref("gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.CPUAndMem"),
+							},
+						},
+						"limits": {
+							SchemaProps: spec.SchemaProps{
+								Ref: ref("gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.CPUAndMem"),
+							},
+						},
+					},
+					Required: []string{"limits"},
+				},
+			},
+			Dependencies: []string{
+				"gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.CPUAndMem"},
+		},
+		"gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.RedisSettings": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "RedisSettings defines the specification of the redis system",
+					Properties: map[string]spec.Schema{
+						"replicas": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"integer"},
+								Format: "int32",
+							},
+						},
+						"resources": {
+							SchemaProps: spec.SchemaProps{
+								Ref: ref("gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.RedisResources"),
+							},
+						},
+						"exporter": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"boolean"},
+								Format: "",
+							},
+						},
+						"version": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+					},
+					Required: []string{"replicas", "resources"},
+				},
+			},
+			Dependencies: []string{
+				"gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.RedisResources"},
+		},
+		"gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.RedisSpec": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "RedisSpec represents a Redis spec",
+					Properties: map[string]spec.Schema{
+						"redis": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Redis defines its failover settings",
+								Ref:         ref("gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.RedisSettings"),
+							},
+						},
+						"sentinel": {
+							SchemaProps: spec.SchemaProps{
+								Description: "Sentinel defines its failover settings",
+								Ref:         ref("gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.SentinelSettings"),
+							},
+						},
+					},
+				},
+			},
+			Dependencies: []string{
+				"gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.RedisSettings", "gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.SentinelSettings"},
+		},
+		"gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.RedisStatus": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "RedisStatus has the status of the system",
+					Properties: map[string]spec.Schema{
+						"phase": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+						"conditions": {
+							SchemaProps: spec.SchemaProps{
+								Type: []string{"array"},
+								Items: &spec.SchemaOrArray{
+									Schema: &spec.Schema{
+										SchemaProps: spec.SchemaProps{
+											Ref: ref("gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.Condition"),
+										},
+									},
+								},
+							},
+						},
+						"master": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"string"},
+								Format: "",
+							},
+						},
+					},
+					Required: []string{"phase", "conditions", "master"},
+				},
+			},
+			Dependencies: []string{
+				"gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.Condition"},
+		},
+		"gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.SentinelSettings": {
+			Schema: spec.Schema{
+				SchemaProps: spec.SchemaProps{
+					Description: "SentinelSettings defines the specification of the sentinel cluster",
+					Properties: map[string]spec.Schema{
+						"replicas": {
+							SchemaProps: spec.SchemaProps{
+								Type:   []string{"integer"},
+								Format: "int32",
+							},
+						},
+						"resources": {
+							SchemaProps: spec.SchemaProps{
+								Ref: ref("gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.RedisResources"),
+							},
+						},
+					},
+					Required: []string{"replicas"},
+				},
+			},
+			Dependencies: []string{
+				"gitlab.com/mvenezia/redis-operator/pkg/apis/redis/v1alpha1.RedisResources"},
+		},
 		"k8s.io/api/core/v1.AWSElasticBlockStoreVolumeSource": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{

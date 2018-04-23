@@ -30,7 +30,6 @@ type RedisList struct {
 
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-
 type Redis struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -39,6 +38,7 @@ type Redis struct {
 }
 
 // RedisSpec represents a Redis spec
+// +k8s:openapi-gen=true
 type RedisSpec struct {
 	// Redis defines its failover settings
 	Redis RedisSettings `json:"redis,omitempty"`
@@ -48,32 +48,37 @@ type RedisSpec struct {
 }
 
 // RedisSettings defines the specification of the redis system
+// +k8s:openapi-gen=true
 type RedisSettings struct {
-	Replicas  int32          `json:"replicas,omitempty"`
-	Resources RedisResources `json:"resources,omitempty"`
+	Replicas  int32          `json:"replicas"`
+	Resources RedisResources `json:"resources"`
 	Exporter  bool           `json:"exporter,omitempty"`
 	Version   string         `json:"version,omitempty"`
 }
 
 // SentinelSettings defines the specification of the sentinel cluster
+// +k8s:openapi-gen=true
 type SentinelSettings struct {
-	Replicas  int32          `json:"replicas,omitempty"`
+	Replicas  int32          `json:"replicas"`
 	Resources RedisResources `json:"resources,omitempty"`
 }
 
 // RedisResources sets the limits and requests for a container
+// +k8s:openapi-gen=true
 type RedisResources struct {
 	Requests CPUAndMem `json:"requests,omitempty"`
-	Limits   CPUAndMem `json:"limits,omitempty"`
+	Limits   CPUAndMem `json:"limits"`
 }
 
 // CPUAndMem defines how many cpu and ram the container will request/limit
+// +k8s:openapi-gen=true
 type CPUAndMem struct {
 	CPU    string `json:"cpu"`
 	Memory string `json:"memory"`
 }
 
 // RedisStatus has the status of the system
+// +k8s:openapi-gen=true
 type RedisStatus struct {
 	Phase      Phase       `json:"phase"`
 	Conditions []Condition `json:"conditions"`
@@ -84,6 +89,7 @@ type RedisStatus struct {
 type Phase string
 
 // Condition saves the state information of the redis system
+// +k8s:openapi-gen=true
 type Condition struct {
 	Type           ConditionType `json:"type"`
 	Reason         string        `json:"reason"`
